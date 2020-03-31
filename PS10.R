@@ -59,23 +59,26 @@ ipip.l <- ipip %>%
 # include at least two customizations to the look of the boxplot 
 # check the documentation for options
 
-Q1 <- ggplot(ipip, aes(x=exer, y=BMI, color=gender)) +
+Q1 <- ggplot(ipip, aes(x=exer, y=BMI, color=gender, fill=gender)) +
     geom_boxplot(
         outlier.size = .8,
         outlier.shape = 8,
         outlier.fill = "lightskyblue",
         lwd=0.5, 
-        notch=TRUE,
-        notchwidth=0.7) +
-    scale_color_manual(name = "Gender", values = c("coral", "lightskyblue")) +
+        notch=FALSE) +
+    scale_color_manual(values = c("coral", "lightskyblue")) +
     xlab("exercise frequency") + ylab("BMI") +
     scale_x_discrete(labels=c("very rarely-never","<1/month","<1/week", "1-2/week", "3-5/week", ">5/week")) +
     theme(axis.text.x = element_text(angle = 45, hjust=1)) +
+    scale_fill_manual(values=c("rosybrown1", "lightcyan")) +
     theme_minimal()
 
 Q1
 
 ggsave('figures/Q1.pdf',units='in',width=4,height=5)
+
+## FYI: I tried to add the notches like in the Q1 answer graph, but it kept yielding an error, so i skipped it.
+## Hope that's ok!
 
 # Q2 visulizing BMI's relationship to income  ---------------------------------------
 
@@ -141,7 +144,7 @@ ggsave('figures/Q3.pdf',units='in',width=4,height=5)
 Q4 <- ggplot(ipip.l, aes(x=BMI_cat, y=value, group=gender, color=gender)) +  
     geom_dotplot(binaxis='y', binwidth=10, stackdir='center', dotsize=.2, alpha=0)+
     stat_summary(fun.data=mean_cl_boot, geom="pointrange", position=position_dodge(.3)) +
-    coord_cartesian(ylim=c(3, 5.5)) +
+    coord_cartesian(ylim=c(3, 5.25)) +
     facet_wrap(vars(trait)) +
     theme_minimal() +
     xlab("BMI category") + ylab("mean value") +
